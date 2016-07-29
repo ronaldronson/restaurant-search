@@ -6,8 +6,21 @@
 
     function update(key, value) {
         key && (request[key] = value)
-        console.log(prepareRequest(request))
-        $.post('/restaurants', prepareRequest(request), renderRests)
+        console.log(prepareRequest(request), toQueryStr(prepareRequest(request)))
+        $.get('/restaurants', toQueryStr(prepareRequest(request)), renderRests)
+    }
+
+    function toQueryStr(obj, prefix) {
+      var str = [];
+      for(var p in obj) {
+        if (obj.hasOwnProperty(p)) {
+          var k = prefix ? prefix + "[" + p + "]" : p, v = obj[p];
+          str.push(typeof v == "object" ?
+            toQueryStr(v, k) :
+            encodeURIComponent(k) + "=" + encodeURIComponent(v));
+        }
+      }
+      return str.join("&");
     }
 
     function renderRests(rests) {

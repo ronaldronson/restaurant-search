@@ -12,10 +12,10 @@ app.use(express.static(__dirname + '/../demo'))
 
 app.use(bodyParser());
 
-app.post('/restaurants', function(req, res) {
-    findRests(utils.buildOptions(req.body), function(err, resp) {
-        res.send(resp)
-    })
+app.get('/restaurants', function(req, res) {
+  findRests(utils.buildOptions(req.query), function(err, resp) {
+      res.send(resp)
+  })
 })
 
 mongodb.connect(function(err, db) {
